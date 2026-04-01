@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - NovaTech</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="ph ph-cpu"></i> Nova<span>Tech</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="empresa.html">Empresa</a></li>
+                <li><a href="contacto.html" class="active">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header" style="text-align: center; padding-top: 150px; padding-bottom: 40px;">
+        <div class="container">
+            <h1 class="fade-up">Impulsa tu Negocio</h1>
+            <p class="fade-up delay-1" style="max-width: 600px; margin: 0 auto; color: var(--text-muted);">Estamos listos para transformar tu organización. Completa el formulario y un asesor corporativo se pondrá en contacto contigo en menos de 24 horas.</p>
+        </div>
+    </div>
+
+    <!-- Lead Form Section -->
+    <section class="contact-section" style="padding-top: 2rem;">
+        <div class="container">
+            <div class="form-wrapper glass-panel fade-up">
+                <div class="form-info">
+                    <h2>Centro de Operaciones</h2>
+                    <p>La comunicación directa es la base de un proyecto exitoso. Estamos a tu disposición en múltiples canales.</p>
+                    <div class="contact-methods" style="margin-top: 2rem;">
+                        <div class="method"><i class="ph ph-map-pin"></i> Torre Central, Planta 42, Madrid</div>
+                        <div class="method"><i class="ph ph-phone"></i> +34 900 123 456</div>
+                        <div class="method"><i class="ph ph-envelope-simple"></i> corporate@novatech.com</div>
+                    </div>
+                </div>
+                <form class="lead-form" id="demoForm">
+                    <div class="form-group">
+                        <label for="name">Nombre Completo</label>
+                        <input type="text" id="name" placeholder="Ej. Carlos Rodríguez" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="empresa">Empresa</label>
+                            <input type="text" id="empresa" placeholder="Tu Empresa S.L." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico Corporativo</label>
+                            <input type="email" id="email" placeholder="carlos@empresa.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="service_interest">Servicio de Interés</label>
+                        <input type="text" id="service_interest" placeholder="Ej. Ciberseguridad, Desarrollo..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensaje">Descripción del Proyecto</label>
+                        <textarea id="mensaje" rows="4" placeholder="Describe brevemente las necesidades de tu empresa..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Enviar Solicitud Segura <i class="ph ph-lock-key"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <div class="logo"><i class="ph ph-cpu"></i> NovaTech</div>
+            </div>
+            <div class="footer-links">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="empresa.html">Empresa</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
