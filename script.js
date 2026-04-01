@@ -1,54 +1,102 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Scroll Animations (Intersection Observer)
+    // 1. Cinematic Loader
+    const loader = document.getElementById('loader');
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('navbar').classList.add('visible');
+            }, 500);
+            checkVisibility();
+        }, 1800);
+    }
+
+    // 2. Custom Cursor (Interactive glow)
+    const cursorGlow = document.getElementById('cursorGlow');
+    if (cursorGlow && window.matchMedia("(pointer: fine)").matches) {
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+        
+        // Increase intensity on interactive elements
+        const iterables = document.querySelectorAll('a, button, .metric-card, .feature-list li, .trust-logos span');
+        iterables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorGlow.style.width = '120px';
+                cursorGlow.style.height = '120px';
+                cursorGlow.style.background = 'radial-gradient(circle, rgba(14, 165, 233, 0.5) 0%, rgba(0,0,0,0) 60%)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorGlow.style.width = '600px';
+                cursorGlow.style.height = '600px';
+                cursorGlow.style.background = 'radial-gradient(circle, rgba(79, 70, 229, 0.08) 0%, rgba(0,0,0,0) 60%)';
+            });
+        });
+    } else if (cursorGlow) {
+        cursorGlow.style.display = 'none'; // hide on touch devices
+    }
+
+    // 3. Scroll Animations (Advanced Reveal)
     const observerOptions = {
         root: null,
         rootMargin: '0px',
         threshold: 0.15
     };
 
+    const revealElements = document.querySelectorAll('.reveal-blur, .reveal-left, .reveal-right, .reveal-top');
+    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                
+                // If it's a counter, animate the number
+                const counter = entry.target.querySelector('.counter');
+                if (counter && !counter.classList.contains('counted')) {
+                    animateCounter(counter);
+                    counter.classList.add('counted');
+                }
+                
                 observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    const fadeElements = document.querySelectorAll('.fade-up');
-    fadeElements.forEach(el => observer.observe(el));
-
-    // 2. Form submission simulation
-    const demoForm = document.getElementById('demoForm');
-    if (demoForm) {
-        demoForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const btn = demoForm.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            
-            btn.innerHTML = '<i class="ph ph-spinner ph-spin"></i> Procesando...';
-            btn.style.opacity = '0.7';
-            
-            setTimeout(() => {
-                btn.innerHTML = '<i class="ph ph-check-circle"></i> Solicitud Recibida';
-                btn.style.backgroundColor = '#27c93f';
-                btn.style.color = '#fff';
-                btn.style.opacity = '1';
-                demoForm.reset();
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.style.backgroundColor = '';
-                }, 3000);
-            }, 1500);
-        });
+    function checkVisibility() {
+        revealElements.forEach(el => observer.observe(el));
+    }
+    
+    if(!loader) {
+        setTimeout(() => document.getElementById('navbar').classList.add('visible'), 100);
+        checkVisibility();
     }
 
-    // 3. Driver.js Tour (Mandatory on load) - ONLY ON INDEX
-    if (document.getElementById('tour-nav')) {
-        const driver = window.driver.js.driver;
+    // 4. Counter animation logic
+    function animateCounter(el) {
+        const target = +el.getAttribute('data-target');
+        const duration = 2000;
+        const start = performance.now();
+        
+        function update(currentTime) {
+            const elapsed = currentTime - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+            const current = Math.floor(easeProgress * target);
+            
+            el.innerHTML = target === 300 ? '+' + current + '%' : current + '.00%';
+            
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            }
+        }
+        requestAnimationFrame(update);
+    }
 
+    // 5. Driver.js Cinematic Tour
+    const driver = window.driver?.js?.driver;
+    if (document.getElementById('tour-nav') && driver) {
         const tour = driver({
             showProgress: true,
             animate: true,
@@ -56,81 +104,26 @@ document.addEventListener('DOMContentLoaded', () => {
             steps: [
                 {
                     element: '#tour-hero',
-                    popover: {
-                        title: 'Copywriting Agresivo',
-                        description: 'Evitamos las descripciones genéricas. El título ataca un dolor directo y promete dominar el sector frente a la competencia.',
-                        side: "bottom",
-                        align: 'center'
-                    }
-                },
-                {
-                    element: '#tour-hero-cta',
-                    popover: {
-                        title: 'CTA Pulsonante',
-                        description: 'Los botones vibran discretamente, emplean colores gradientes e invitan a iniciar un "cierre" (Auditoría / Contacto).',
-                        side: "bottom",
-                        align: 'center'
-                    }
-                },
-                {
-                    element: '#tour-trust',
-                    popover: {
-                        title: 'Authority Boost',
-                        description: 'Los logotipos de confianza reducen inmediatamente la fricción. La gente confía si ve a empresas importantes respaldando tu solución.',
-                        side: "top",
-                        align: 'center'
-                    }
-                },
-                {
-                    element: '#tour-metrics',
-                    popover: {
-                        title: 'Prueba Matemática (ROI)',
-                        description: 'Mostramos números puros porque las empresas compran rentabilidad (6x ROI, 300% eficiencia).',
-                        side: "bottom",
-                        align: 'center'
-                    }
+                    popover: { title: 'Dramatismo Visual', description: 'Entrada con Loader y revelaciones suaves para máxima retención.', side: "bottom", align: 'center' }
                 },
                 {
                     element: '#tour-overview',
-                    popover: {
-                        title: 'Contraste Cognitivo',
-                        description: 'Diferenciamos de un vistazo "el Problema" vs "la Solución". Aquí demostramos qué pierden si NO trabajan contigo.',
-                        side: "right",
-                        align: 'start'
-                    }
-                },
-                {
-                    element: '#tour-testimonial',
-                    popover: {
-                        title: 'Storytelling & Prueba Social',
-                        description: 'Citas directas de cargos reales (ej. "Directora de Operaciones") hablando de ahorro monetivo. Es la pieza final de confianza que vende.',
-                        side: "top",
-                        align: 'center'
-                    }
+                    popover: { title: 'Scroll Inmersivo', description: 'Los elementos se difuminan (blur) y se deslizan simulando espacio 3D.', side: "right", align: 'start' }
                 },
                 {
                     element: '#tour-cta',
-                    popover: {
-                        title: 'El Embudo Final',
-                        description: 'El diseño concluye encerrando al usuario interesado en el formulario. Ya ha leído todas las pruebas, este es el momento de conversión.',
-                        side: "top",
-                        align: 'center'
-                    }
+                    popover: { title: 'Cursor Interactivo', description: 'El puntero actúa como linterna inteligente absorbiendo la atención del usuario en botones clave.', side: "top", align: 'center' }
                 }
             ],
-            onNextClick: (element, step, { config, state }) => {
-                tour.moveNext();
-            }
+            onNextClick: (element, step, { config, state }) => { tour.moveNext(); }
         });
 
-        // Mandatory Tour on load (New key forces it to run)
         setTimeout(() => {
-            const tourShown = sessionStorage.getItem('corporateSalesTour');
+            const tourShown = sessionStorage.getItem('corporateCinematicTour');
             if (!tourShown) {
                 tour.drive();
-                sessionStorage.setItem('corporateSalesTour', 'true');
+                sessionStorage.setItem('corporateCinematicTour', 'true');
             }
-        }, 1500);
+        }, 2500); // Trigger slightly after loader finishes
     }
-
 });
